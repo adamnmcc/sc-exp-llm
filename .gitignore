@@ -8,3 +8,5 @@ __pycache__/
 *.log
 .cache/
 raw_sherlock/
+raw_code4rena/
+raw_swc/

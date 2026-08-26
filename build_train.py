@@ -34,6 +34,8 @@ def clean_sherlock(analysis):
         if s.startswith("## Found by"):
             skip_found_by = True
             continue
+        if s.startswith("_Submitted by") and s.endswith("_"):
+            continue
         if skip_found_by:
             if not s:
                 skip_found_by = False
@@ -61,9 +63,9 @@ def defihacklabs_records():
     return recs
 
 
-def sherlock_records():
+def audit_records():
     recs = []
-    for f in glob.glob("raw_sherlock/*.json"):
+    for f in glob.glob("raw_sherlock/*.json") + glob.glob("raw_code4rena/*.json"):
         d = json.load(open(f))
         code = str(d.get("code", "")).strip()
         analysis = clean_sherlock(str(d.get("analysis", "")).strip())
@@ -79,11 +81,11 @@ def sherlock_records():
 
 def build():
     a = defihacklabs_records()
-    b = sherlock_records()
+    b = audit_records()
     with open(OUT, "w", encoding="utf-8") as out:
         for text in a + b:
             out.write(json.dumps({"text": text}, ensure_ascii=False) + "\n")
-    print(f"train.jsonl: {len(a)} DeFiHackLabs (PoC) + {len(b)} Sherlock (code-in) "
+    print(f"train.jsonl: {len(a)} DeFiHackLabs (PoC) + {len(b)} audit (code-in) "
           f"= {len(a) + len(b)} records")
     return len(a), len(b)
 
