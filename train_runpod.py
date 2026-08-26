@@ -1,4 +1,5 @@
 import argparse
+import os
 import json
 
 MODEL = "unsloth/Qwen2.5-Coder-3B-Instruct-bnb-4bit"
@@ -8,7 +9,7 @@ OUT = "adapters_cuda"
 RANK = 8
 # ponytail: MLX `scale=20` == PEFT lora_alpha/rank. rank 8 -> alpha 160 to match.
 LORA_ALPHA = 160
-MAX_SEQ = 32768  # Qwen2.5 native ctx; keeps ~85% of records whole. 13 outliers (>32k tok) still clip.
+MAX_SEQ = int(os.environ.get("MAX_SEQ", "32768"))  # override for GPUs without working flash-attn
 ITERS = 800
 LR = 1e-5
 
