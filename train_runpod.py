@@ -10,7 +10,7 @@ RANK = 8
 # ponytail: MLX `scale=20` == PEFT lora_alpha/rank. rank 8 -> alpha 160 to match.
 LORA_ALPHA = 160
 MAX_SEQ = int(os.environ.get("MAX_SEQ", "32768"))  # override for GPUs without working flash-attn
-ITERS = 800
+ITERS = int(os.environ.get("ITERS", "800"))
 LR = 1e-5
 
 def check_dataset():
