@@ -1,8 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-# RunPod: start from a PyTorch CUDA base image (e.g. runpod/pytorch:2.4.0-py3.11-cuda12.4).
-# Then: git clone this repo, cd into it, bash train_runpod.sh
+# Persistent network volume is mounted at /workspace.
+# venv + HuggingFace cache live ON the volume, so a fresh pod reuses them
+# instead of reinstalling torch/unsloth and re-downloading the model.
+VOL=/workspace
+export HF_HOME="$VOL/hf"
+VENV="$VOL/venv"
+
+if [ ! -d "$VENV" ]; then
+  python -m venv "$VENV"
+fi
+source "$VENV/bin/activate"
 
 python -m pip install --upgrade pip
 python -m pip install unsloth trl datasets
