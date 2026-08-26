@@ -1,19 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-# Persistent network volume is mounted at /workspace.
-# venv + HuggingFace cache live ON the volume, so a fresh pod reuses them
-# instead of reinstalling torch/unsloth and re-downloading the model.
+# Persistent network volume mounted at /workspace: venv + HF cache live here so
+# a fresh pod reuses them. --system-site-packages reuses the base image's torch
+# and CUDA libs (skips a ~2.5GB reinstall). uv makes the resolve+install fast.
 VOL=/workspace
 export HF_HOME="$VOL/hf"
 VENV="$VOL/venv"
 
 if [ ! -d "$VENV" ]; then
-  python -m venv "$VENV"
+  python -m venv --system-site-packages "$VENV"
 fi
 source "$VENV/bin/activate"
 
-python -m pip install --upgrade pip
-python -m pip install unsloth trl datasets
+python -m pip install -q uv
+uv pip install unsloth trl datasets
 
 python train_runpod.py
