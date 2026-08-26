@@ -70,6 +70,11 @@ def train():
     tokenizer.save_pretrained(OUT)
     print(f"Saved LoRA adapters to {OUT}/")
 
+    # Export a home-runnable GGUF for the GTX 1660 (6GB): merge LoRA, quantize.
+    # q5_k_m ~2.3GB, leaves room for context on 6GB. Run with llama.cpp/Ollama.
+    model.save_pretrained_gguf("model-gguf", tokenizer, quantization_method="q5_k_m")
+    print("Saved GGUF (q5_k_m) to model-gguf/")
+
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
