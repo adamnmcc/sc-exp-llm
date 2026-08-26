@@ -1,0 +1,15 @@
+{
+  "incident": "tokenhelper.sol",
+  "source_path": "src/test/tokenhelper.sol",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/test/tokenhelper.sol\n// SPDX-License-Identifier: UNLICENSED\n\npragma solidity ^0.8.0;\n\nlibrary TokenHelper {\n    function callTokenFunction(\n        address tokenAddress,\n        bytes memory data,\n        bool staticCall\n    ) private returns (bytes memory) {\n        (bool success, bytes memory result) = staticCall ? tokenAddress.staticcall(data) : tokenAddress.call(data);\n        require(success, \"Failed to call token function\");\n        return result;\n    }\n\n    function getTokenBalance(address tokenAddress, address targetAddress) internal returns (uint256) {\n        bytes memory result =\n            callTokenFunction(tokenAddress, abi.encodeWithSignature(\"balanceOf(address)\", targetAddress), true);\n        return abi.decode(result, (uint256));\n    }\n\n    function getTokenDecimals(\n        address tokenAddress\n    ) internal returns (uint8) {\n        bytes memory result = callTokenFunction(tokenAddress, abi.encodeWithSignature(\"decimals()\"), true);\n        return abi.decode(result, (uint8));\n    }\n\n    function getTokenSymbol(\n        address tokenAddress\n    ) internal returns (string memory) {\n        bytes memory result = callTokenFunction(tokenAddress, abi.encodeWithSignature(\"symbol()\"), true);\n        return abi.decode(result, (string));\n    }\n\n    function approveToken(address token, address spender, uint256 spendAmount) internal returns (bool) {\n        bytes memory result =\n            callTokenFunction(token, abi.encodeWithSignature(\"approve(address,uint256)\", spender, spendAmount), false);\n        return abi.decode(result, (bool));\n    }\n\n    function transferToken(address token, address receiver, uint256 amount) internal returns (bool) {\n        bytes memory result =\n            callTokenFunction(token, abi.encodeWithSignature(\"transfer(address,uint256)\", receiver, amount), false);\n        return abi.decode(result, (bool));\n    }\n}\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/test/tokenhelper.sol"
+  ],
+  "raw_sol_files": [
+    "sol/tokenhelper.sol/tokenhelper.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}

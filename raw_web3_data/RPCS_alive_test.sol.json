@@ -1,0 +1,15 @@
+{
+  "incident": "RPCS_alive_test.sol",
+  "source_path": "src/RPCS_alive_test.sol",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/RPCS_alive_test.sol\n// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.10;\n\nimport \"forge-std/Test.sol\";\n\ncontract RPCS_alive_test is Test {\n    function test_mainnet() public {\n        vm.createSelectFork(\"mainnet\");\n    }\n    \n    function test_blast() public {\n        vm.createSelectFork(\"blast\");\n    }\n    \n    function test_optimism() public {\n        vm.createSelectFork(\"optimism\");\n    }\n    \n    function test_fantom() public {\n        vm.createSelectFork(\"fantom\");\n    }\n    \n    function test_arbitrum() public {\n        vm.createSelectFork(\"arbitrum\");\n    }\n    \n    function test_bsc() public {\n        vm.createSelectFork(\"bsc\");\n    }\n    \n    function test_moonriver() public {\n        vm.createSelectFork(\"moonriver\");\n    }\n    \n    function test_gnosis() public {\n        vm.createSelectFork(\"gnosis\");\n    }\n    \n    function test_avalanche() public {\n        vm.createSelectFork(\"avalanche\");\n    }\n    \n    function test_polygon() public {\n        vm.createSelectFork(\"polygon\");\n    }\n    \n    function test_celo() public {\n        vm.createSelectFork(\"celo\");\n    }\n    \n    function test_base() public {\n        vm.createSelectFork(\"base\");\n    }\n    \n    function test_linea() public {\n        vm.createSelectFork(\"linea\");\n    }\n    \n    function test_mantle() public {\n        vm.createSelectFork(\"mantle\");\n    }\n}\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/RPCS_alive_test.sol"
+  ],
+  "raw_sol_files": [
+    "sol/RPCS_alive_test.sol/RPCS_alive_test.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}

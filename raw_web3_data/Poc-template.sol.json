@@ -1,0 +1,15 @@
+{
+  "incident": "Poc-template.sol",
+  "source_path": "src/Poc-template.sol",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/Poc-template.sol\n// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.10;\n/*\n\nimport \"forge-std/Test.sol\";\nimport \"./interface.sol\";\n\n// @KeyInfo - Total Lost : ~999M US$\n// Attacker : 0xcafebabe\n// Attack Contract : 0xdeadbeef\n// Vulnerable Contract : 0xdeadbeef\n// Attack Tx : 0x123456789\n\n// @Info\n// Vulnerable Contract Code : https://etherscan.io/address/0xdeadbeef#code\n\n// @Analysis\n// Post-mortem : https://www.google.com/\n// Twitter Guy : https://www.google.com/\n// Hacking God : https://www.google.com/\n\ncontract ContractTest is Test {\n    IUSDC constant USDC = IUSDC(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);\n    IUSDT constant USDT = IUSDT(0xdAC17F958D2ee523a2206206994597C13D831ec7);\n    \n    function setUp() public {\n        vm.createSelectFork(\"mainnet\", 15460093);\n        vm.label(address(USDC), \"USDC\");\n        vm.label(address(USDT), \"USDT\");\n        //address alice = makeAddr(\"alice\");\n    }\n    \n    function testExploit() public {\n        //vm.startPrank(alice);\n        //vm.stopPrank();\n    }\n}\n\n*/\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/Poc-template.sol"
+  ],
+  "raw_sol_files": [
+    "sol/Poc-template.sol/Poc-template.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}

