@@ -7,6 +7,6 @@ set -euo pipefail
 # Persist only the model cache on the volume (that's the big, slow download).
 export HF_HOME=/workspace/hf
 
-pip install unsloth trl datasets
+python -m pip install --break-system-packages unsloth trl datasets
 
 python train_runpod.py
