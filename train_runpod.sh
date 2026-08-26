@@ -1,17 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# Volume mounted at /workspace: venv + HF cache persist here.
-# --system-site-packages reuses the base image's torch/CUDA (no ~2.5GB reinstall).
-# Plain pip (not uv) so already-present system torch is left alone.
-VOL=/workspace
-export HF_HOME="$VOL/hf"
-VENV="$VOL/venv"
-
-if [ ! -d "$VENV" ]; then
-  python -m venv --system-site-packages "$VENV"
-fi
-source "$VENV/bin/activate"
+# No venv: building one on the mfs network volume is unreliable (broken symlinks
+# and exec bits). Install unsloth into the image's system Python instead — torch
+# and CUDA are already present there, so this is fast (~1-2 min) and reliable.
+# Persist only the model cache on the volume (that's the big, slow download).
+export HF_HOME=/workspace/hf
 
 pip install unsloth trl datasets
 
