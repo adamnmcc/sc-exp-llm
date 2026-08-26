@@ -8,15 +8,9 @@ OUT = "adapters_cuda"
 RANK = 8
 # ponytail: MLX `scale=20` == PEFT lora_alpha/rank. rank 8 -> alpha 160 to match.
 LORA_ALPHA = 160
-MAX_SEQ = 4096
+MAX_SEQ = 32768  # Qwen2.5 native ctx; keeps ~85% of records whole. 13 outliers (>32k tok) still clip.
 ITERS = 800
 LR = 1e-5
-
-# Qwen2.5-Coder-3B = 36 layers. MLX `num_layers: 12` trains only the last 12.
-QWEN_3B_LAYERS = 36
-LAST_N = 12
-LAYERS = list(range(QWEN_3B_LAYERS - LAST_N, QWEN_3B_LAYERS))
-
 
 def check_dataset():
     with open(DATA) as f:
@@ -45,7 +39,6 @@ def train():
         lora_dropout=0.0,
         target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                         "gate_proj", "up_proj", "down_proj"],
-        layers_to_transform=LAYERS,
         use_gradient_checkpointing="unsloth",
         random_state=0,
     )
